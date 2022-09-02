@@ -1,0 +1,21 @@
+.header-status {
+  display: flex;
+  height: 70px;
+  background-color: #eee;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.cta {
+  margin-left: auto;
+}
+
+
+.header-status a {  
+  color: rgb(58, 58, 58);
+  text-decoration: none;
+}
+
+.header-status .active {
+  text-decoration: underline;
+}

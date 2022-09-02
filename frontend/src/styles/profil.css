@@ -1,0 +1,26 @@
+img{
+  object-fit: cover;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+}
+#filelabel{
+  background-color: aquamarine;
+  padding: 10px;
+  display: flex;
+  justify-items: baseline;
+  width: 150px;
+  margin: 10px;
+  border-radius: 5px;
+}
+.editI{
+  margin-right: 15px;
+  margin-left: 5px;
+  color:blue;
+}
+.hide{
+  display: none;
+}
+.show{
+  display: block;
+}
