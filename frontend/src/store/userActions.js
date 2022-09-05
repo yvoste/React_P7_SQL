@@ -73,7 +73,6 @@ export const setUserDetails = createAsyncThunk(
         }
       });
       const { data } = await instance.put(`/user/profile/${mid}`, dataProfil);
-      console.log(data);
       return data;
     } catch (error) {
       console.log(error);

@@ -1,17 +1,11 @@
-import http from "../http";
+import instance from "../http";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getArticles = createAsyncThunk(
   "article/getArticles",
-  async ({ email, password }, { rejectWithValue }) => {
+  async (arg, { rejectWithValue }) => {
     try {
-      // configure header's Content-Type as JSON
-
-      const { data } = await http.post("/user/login", { email, password });
-
-      // store user's token in local storage
-      localStorage.setItem("userToken", data.userToken);
-
+      const { data } = await instance.get("/messages");
       return data;
     } catch (error) {
       // return custom error message from API if any
@@ -30,7 +24,7 @@ export const getArticle = createAsyncThunk(
     try {
       // configure header's Content-Type as JSON
 
-      const { data } = await http.post("/user/login", { email, password });
+      const { data } = await instance.post("/user/login", { email, password });
 
       // store user's token in local storage
       localStorage.setItem("userToken", data.userToken);
@@ -53,7 +47,7 @@ export const updateArticle = createAsyncThunk(
     try {
       // configure header's Content-Type as JSON
 
-      const { data } = await http.post("/user/login", { email, password });
+      const { data } = await instance.post("/user/login", { email, password });
 
       // store user's token in local storage
       localStorage.setItem("userToken", data.userToken);
@@ -76,7 +70,7 @@ export const postArticle = createAsyncThunk(
     try {
       // configure header's Content-Type as JSON
 
-      const { data } = await http.post("/user/login", { email, password });
+      const { data } = await instance.post("/user/login", { email, password });
 
       // store user's token in local storage
       localStorage.setItem("userToken", data.userToken);
@@ -99,7 +93,7 @@ export const delArticle = createAsyncThunk(
     try {
       // configure header's Content-Type as JSON
 
-      const { data } = await http.post("/user/login", { email, password });
+      const { data } = await instance.post("/user/login", { email, password });
 
       // store user's token in local storage
       localStorage.setItem("userToken", data.userToken);

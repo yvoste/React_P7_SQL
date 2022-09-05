@@ -28,7 +28,15 @@ export const Nav = () => {
               <Link to="/" className="navbar-brand">
                 Home
               </Link>
-              <Link to="/user-profile">Profile</Link>
+              <Link to="/list" className="navbar-brand">
+                List
+              </Link>
+              <Link to="/users" className="navbar-brand">
+                Users
+              </Link>
+              <Link to="/user-profile" className="navbar-brand">
+                Profile
+              </Link>
               <button className="button" onClick={() => dispatch(logout())}>
                 Logout
               </button>

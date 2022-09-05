@@ -41,6 +41,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.userInfo = payload;
       state.userToken = payload.userToken;
+      state.success = true;
     },
     [userLogin.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -71,6 +72,7 @@ const userSlice = createSlice({
     },
     [getUserDetails.rejected]: (state, { payload }) => {
       state.loading = false;
+      state.error = payload;
     },
     // update user details
     [setUserDetails.pending]: (state) => {
@@ -78,10 +80,14 @@ const userSlice = createSlice({
     },
     [setUserDetails.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.userInfo = payload;
+      state.userInfo.pseudo = payload.pseudo;
+      state.userInfo.bio = payload.bio;
+      state.userInfo.avatar = payload.avatar;
+      state.success = true;
     },
     [setUserDetails.rejected]: (state, { payload }) => {
       state.loading = false;
+      state.error = payload;
     },
   },
 });

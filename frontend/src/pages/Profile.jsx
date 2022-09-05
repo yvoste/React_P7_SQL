@@ -1,18 +1,17 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { getUserDetails, setUserDetails } from "../store/userActions";
+import { setUserDetails } from "../store/userActions";
 import { Error } from "../components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/profil.css";
 
 export const Profile = () => {
-  const { loading, userInfo, error, success } = useSelector(
-    (state) => state.user
-  );
-  const [customError, setCustomError] = useState(null);
+  const { loading, userInfo, error } = useSelector((state) => state.user);
+  const [customError] = useState(null);
   const [selectedFile] = useState();
   const navigate = useNavigate();
+  const [id_user] = useState(userInfo.id_user);
   const [pseudo, setPseudo] = useState(userInfo.pseudo);
   const [bio, setBio] = useState(userInfo.bio);
   const [avatar] = useState(userInfo.avatar);
@@ -20,13 +19,6 @@ export const Profile = () => {
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   let formData = new FormData();
-
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     console.log(userInfo);
-  //     dispatch(getUserDetails(userInfo.id_user));
-  //   }
-  // }, [userInfo, dispatch]);
 
   const updateValue = (e) => {
     if (e.target.name === "bio") {
@@ -97,10 +89,11 @@ export const Profile = () => {
     if (elem.classList.contains("hide")) {
       elem.classList.remove("hide");
       elem.classList.add("show");
-    } else if (elem.classList.contains("show")) {
-      elem.classList.remove("show");
-      elem.classList.add("hide");
     }
+    // } else if (elem.classList.contains("show")) {
+    //   elem.classList.remove("show");
+    //   elem.classList.add("hide");
+    // }
   };
 
   return (
@@ -115,8 +108,7 @@ export const Profile = () => {
               type="hidden"
               name="userId"
               id="userId"
-              value={userInfo.id_user}
-              onChange={(e) => updateValue(e)}
+              value={id_user}
             />
           </div>
           <div className=" mb-3">
@@ -187,7 +179,7 @@ export const Profile = () => {
             </label>
           </div>
           <button type="submit" className="button" disabled={loading}>
-            Register
+            UPDATE
           </button>
         </form>
       )}
