@@ -1,4 +1,4 @@
-img{
+#thumbList{
   object-fit: cover;
   border-radius: 50%;
   width: 50px;
@@ -6,4 +6,9 @@ img{
 }
 .global_posts{
   flex-wrap: wrap;
+}
+.listEntete{
+  display: flex !important;
+  align-items: center;
+  justify-content: space-around;
 }

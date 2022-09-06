@@ -1,0 +1,101 @@
+.card-img-top {
+  height: 30vh;
+  object-fit: cover;
+}
+.card{
+  box-shadow: 1px 2px 2px 1px;
+  padding: 2px;
+  margin: 5px;
+}
+.card:hover{
+  cursor:pointer;
+  transform: scale(1.01);
+}
+.bloc-card{
+  box-shadow: 2px 3px 2px #8181ee75;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: #869de2 1px solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.bloc-card:hover{
+  border:rgb(134, 226, 214) 1px solid;
+  transform: scale(1.01);
+}
+.card-content{
+  display: flex;
+  flex-direction: column;
+}
+.redor{
+  color: red;
+  cursor: pointer;
+}
+.verdor{
+  color:green;
+  cursor: pointer;
+}
+.grisor{
+  color:grey;
+}
+div.is-disabled
+{
+  pointer-events: none;
+  opacity: 0.7;
+}
+.customDel{
+  cursor:pointer;
+}
+.card-tit-pseud{
+  display: flex;
+  justify-content: space-between;
+  padding-right: 25px;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+.author{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+.pseud{
+  margin-left: 10px;
+}
+.author-det{
+  display: flex;
+  align-items: center;
+}
+.card-title{
+  padding-right: 15px;;
+}
+.card-date{
+  font-size: 13px;
+  margin-bottom: 15px;
+  margin-right: -25px;
+}
+#react{
+  display: flex;
+}
+.reaction{
+  margin-right: 15px;
+}
+.userRole{
+  font-size: 12px;
+  margin-bottom: 0;
+  margin-left: 5px;
+}
+.customEdit{
+  color:aqua;
+  margin-right: 15px;
+}
+.customDel{
+  color: red;
+}
+.delEdit{
+  justify-content: space-between;
+}

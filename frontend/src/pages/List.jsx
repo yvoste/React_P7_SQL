@@ -8,6 +8,7 @@ import "../styles/list.css";
 export const List = () => {
   const { loading, articles, error } = useSelector((state) => state.articles);
   const { userInfo } = useSelector((state) => state.user);
+  const [id_user] = useState(userInfo.id_user);
   const dispatch = useDispatch();
 
   //const [posts, setPosts] = useState(null); // initial posts is empty
@@ -28,13 +29,15 @@ export const List = () => {
   return (
     <div className="container-fluid">
       <div className="container-fluid">
-        <img id="thumb" src={avatar} alt="" />
-        <h1 className="display-3 text-dark">Hello {pseudo}</h1>
-
+        <div className="d-flex listEntete">
+          <img id="thumbList" src={avatar} alt="" />
+          <h3 className="display-3 text-dark">Hello {pseudo}</h3>
+          <p className="userRole">{userInfo.isAdmin ? "Admin" : "User"}</p>
+        </div>
         <div className="d-flex global_posts">
           {articles?.map((article) => (
             // transmission des props au composant enfant pour chaque tour key  +  content + callback + values
-            <Card key={article.id} post={article} />
+            <Card key={article.id} article={article} />
           ))}
         </div>
       </div>

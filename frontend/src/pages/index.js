@@ -4,3 +4,4 @@ export * from "./Login";
 export * from "./Profile";
 export * from "./List";
 export * from "./Users";
+export * from "./UserDetails";

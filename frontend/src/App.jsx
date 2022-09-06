@@ -1,6 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Nav } from "./components";
-import { Login, Signup, Profile, Home, List, Users } from "./pages";
+import {
+  Login,
+  Signup,
+  Profile,
+  Home,
+  List,
+  Users,
+  UserDetails,
+} from "./pages";
 import ProtectedRoute from "./routing/ProtectedRoute";
 import "./App.css";
 
@@ -17,6 +25,7 @@ function App() {
             <Route path="/user-profile" element={<Profile />} />
             <Route path="/list" element={<List />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/user-details" element={<UserDetails />} />
           </Route>
         </Routes>
       </main>
