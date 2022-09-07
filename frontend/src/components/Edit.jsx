@@ -1,22 +1,28 @@
+import { useLocation, useNavigate } from "react-router-dom";
+
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { setUserDetails } from "../store/userActions";
 import { Error } from "../components";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "../styles/profil.css";
 
-export const Profile = () => {
+export const Edit = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { title, content, img, image } = location.state?.article;
+  console.log(title, content, img, image);
+
   const { loading, userInfo, error } = useSelector((state) => state.user);
   const [customError] = useState(null);
   const [selectedFile] = useState();
-  const navigate = useNavigate();
+
   const [id_user] = useState(userInfo.id_user);
   const [pseudo, setPseudo] = useState(userInfo.pseudo);
   const [bio, setBio] = useState(userInfo.bio);
   const [avatar] = useState(userInfo.avatar);
 
-  const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   let formData = new FormData();
 
@@ -95,54 +101,47 @@ export const Profile = () => {
     //   elem.classList.add("hide");
     // }
   };
-
   return (
     <div className="d-flex justify-content-center">
       <form onSubmit={handleSubmit(onSubmit)} className="col-10 sign-up-form">
         {error && <Error>{error}</Error>}
         {customError && <Error>{customError}</Error>}
         <div className=" mb-3">
-          <input
-            {...register("userId")}
-            type="hidden"
-            name="userId"
-            id="userId"
-            value={id_user}
-          />
-        </div>
-        <div className=" mb-3">
-          <label htmlFor="pseudo" className="form-label">
-            Pseudo
+          <label htmlFor="title" className="form-label">
+            Title
           </label>
           <input
-            {...register("pseudo")}
-            placehoder="pseudo"
+            {...register("title")}
+            placehoder="title"
             type="text"
-            name="pseudo"
-            id="pseudo"
-            value={pseudo}
+            name="title"
+            id="title"
+            value={title}
             onChange={(e) => updateValue(e)}
           />
         </div>
         <div className=" mb-3">
-          <label htmlFor="bio" className="form-label">
-            Bio
+          <label htmlFor="content" className="form-label">
+            Content
           </label>
           <textarea
-            {...register("bio")}
-            placehoder="bio"
+            {...register("content")}
+            placehoder="content"
             type="textarea"
-            name="bio"
-            id="bio"
-            value={bio}
+            name="content"
+            id="content"
+            value={content}
             onChange={(e) => updateValue(e)}
           />
         </div>
         <div className="mb-3">
           <div className="">
             <span id="preview"></span>
-            {avatar && <img id="thumb" src={avatar} alt="" />}
+            {img && <img id="thumb" src={img} alt="" />}
           </div>
+          <label htmlFor="content" className="form-label">
+            {img ? "Changer l'image" : "Ajouter une image"}
+          </label>
           <input
             {...register("fileupload")}
             type="file"
@@ -157,25 +156,18 @@ export const Profile = () => {
             htmlFor="fileupload"
             style={{ cursor: "pointer" }}
           >
-            BROWSER
             <i className="material-icons left editI">cloud_upload</i>
+            BROWSER
           </label>
         </div>
         <div id="manipTrash" className="hide">
-          <label
-            id="filelabel"
-            htmlFor="fileupload"
-            style={{ cursor: "pointer" }}
+          <i
+            id="removeTrash"
+            className="material-icons left matI customDel"
+            onClick={() => handleDel()}
           >
-            DELETE
-            <i
-              id="removeTrash"
-              className="material-icons left matI customDel"
-              onClick={() => handleDel()}
-            >
-              delete_sweep
-            </i>
-          </label>
+            delete_sweep
+          </i>
         </div>
         <button type="submit" className="button" disabled={loading}>
           UPDATE

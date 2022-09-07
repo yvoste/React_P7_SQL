@@ -5,6 +5,7 @@ export const UserDetails = () => {
   const location = useLocation();
   const { id, pseudo, bio, avatar } = location.state?.author;
   console.log(id, pseudo, bio, avatar);
+  const updateValue = () => {};
   return (
     <div className="d-flex justify-content-center">
       <div className=" mb-3">
@@ -21,16 +22,17 @@ export const UserDetails = () => {
           <img id="thumbList" src={avatar} alt="" />
         </div>
       </div>
-      {bio ? (
-        <div className=" mb-3">
-          <label htmlFor="bio" className="form-label">
-            Bio
-          </label>
-          <textarea>{bio}</textarea>
-        </div>
-      ) : (
-        ""
-      )}
+
+      <div className=" mb-3">
+        <label htmlFor="bio" className="form-label">
+          Bio
+        </label>
+        {bio !== "" && (
+          <textarea value={bio} onChange={(e) => updateValue(e)}>
+            {bio}
+          </textarea>
+        )}
+      </div>
     </div>
   );
 };

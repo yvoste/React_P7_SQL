@@ -31,6 +31,8 @@ export const Card = ({ article }) => {
 
   const editArticle = (id) => {
     console.log(id);
+    console.log(article);
+    navigate("/edit", { state: { article } });
   };
 
   return (

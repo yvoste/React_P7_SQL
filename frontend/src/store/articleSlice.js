@@ -26,8 +26,14 @@ const articleSlice = createSlice({
     },
     [getArticles.fulfilled]: (state, { payload }) => {
       state.loading = false;
+      // for (let ind in payload) {
+      //   console.log(ind);
+      //   if (ind == 2) {
+      //     console.log(payload[ind]);
+      //     payload[ind].img = "http://localhost:5000/images/a39.jpg";
+      //   }
+      // }
       state.articles = payload;
-      state.userToken = payload.userToken;
     },
     [getArticles.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -41,7 +47,6 @@ const articleSlice = createSlice({
     [getArticle.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.articles = payload;
-      state.userToken = payload.userToken;
     },
     [getArticle.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -55,7 +60,6 @@ const articleSlice = createSlice({
     [updateArticle.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.articles = payload;
-      state.userToken = payload.userToken;
     },
     [updateArticle.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -68,7 +72,6 @@ const articleSlice = createSlice({
     [postArticle.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.articles = payload;
-      state.userToken = payload.userToken;
     },
     [postArticle.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -81,7 +84,6 @@ const articleSlice = createSlice({
     [delArticle.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.articles = payload;
-      state.userToken = payload.userToken;
     },
     [delArticle.rejected]: (state, { payload }) => {
       state.loading = false;

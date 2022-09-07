@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Nav } from "./components";
+import { Nav, Edit } from "./components";
 import {
   Login,
   Signup,
@@ -26,6 +26,7 @@ function App() {
             <Route path="/list" element={<List />} />
             <Route path="/users" element={<Users />} />
             <Route path="/user-details" element={<UserDetails />} />
+            <Route path="/edit" element={<Edit />} />
           </Route>
         </Routes>
       </main>
