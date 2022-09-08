@@ -1,68 +1,105 @@
 import { useLocation, useNavigate } from "react-router-dom";
-
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { setUserDetails } from "../store/userActions";
+import { updateArticle } from "../store/articleActions";
 import { Error } from "../components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { unwrapResult } from "@reduxjs/toolkit";
 import "../styles/profil.css";
 
 export const Edit = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const { title, content, img, image } = location.state?.article;
-  console.log(title, content, img, image);
 
-  const { loading, userInfo, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const location = useLocation();
+  const { idArt } = location.state?.idA;
+
+  console.log(idArt);
+
+  const { loading, articles, error } = useSelector((state) => state.articles);
+
+  const art = articles.find(({ id }) => id === idArt);
+
+  console.log(art);
+
   const [customError] = useState(null);
+
   const [selectedFile] = useState();
 
-  const [id_user] = useState(userInfo.id_user);
-  const [pseudo, setPseudo] = useState(userInfo.pseudo);
-  const [bio, setBio] = useState(userInfo.bio);
-  const [avatar] = useState(userInfo.avatar);
+  // defaul value of textarea in rows
+  const [textareaheight, setTextareaheight] = useState(4);
+
+  const [title, setTitle] = useState(art.title);
+  const [content, setContent] = useState(art.content);
+  const [img] = useState(art.img);
+  const [image] = useState(art.image);
 
   const { register, handleSubmit } = useForm();
   let formData = new FormData();
 
   const updateValue = (e) => {
-    if (e.target.name === "bio") {
-      let bio = e.target.value;
-      console.log(bio);
-      setBio(bio);
+    if (e.target.name === "content") {
+      const height = e.target.scrollHeight;
+      const rows = e.target.rows;
+      const rowHeight = 15; // arbitraire
+      const trows = Math.ceil(height / rowHeight) - 1;
+      console.log(height, rows, trows);
+      if (trows < textareaheight) {
+        setTextareaheight(trows);
+      }
+      let content = e.target.value;
+      console.log(content);
+      setContent(content);
     } else {
-      let pseudo = e.target.value;
-      console.log(pseudo);
-      setPseudo(pseudo);
+      let title = e.target.value;
+      console.log(title);
+      setTitle(title);
     }
   };
 
   const onSubmit = (data) => {
     console.log(data);
-    formData.append("pseudo", data.pseudo);
-    formData.append("bio", data.bio);
-    formData.append("userId", data.userId);
+
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    formData.append("user_id", art.user_id);
+    formData.append("image", art.image);
+    formData.append("idMessage", idArt);
 
     // One possibilty to watch formData
-    formData.forEach((value, key) => {
-      console.log(key + "__" + value);
-    });
-    console.log(typeof formData);
+    // formData.forEach((value, key) => {
+    //   console.log(key + "__" + value);
+    // });
 
-    const { post } = dispatch(setUserDetails(formData));
-    //toggleLoader(false);
-    if (post) {
-      navigate("/");
-    }
+    const bidouble = {
+      data: formData,
+      articles: articles,
+    };
+
+    dispatch(updateArticle(bidouble))
+      .then(unwrapResult)
+      .then((obj) => {
+        console.log({ obj });
+        navigate("/list");
+      })
+      .catch((obj) => console.log({ objErr: obj }));
   };
 
+  // redirect authenticated user to profile screen
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     navigate("/");
+  //   }
+  // }, [navigate, userInfo]);
+
   const handleFileChange = (e) => {
-    if (document.getElementById("thumb") !== null) {
-      document.getElementById("thumb").remove();
+    if (document.getElementById("thumbi") !== null) {
+      document.getElementById("thumbi").remove();
     }
     let img = document.createElement("img");
-    img.setAttribute("id", "thumb");
+    img.setAttribute("id", "thumbi");
+    img.setAttribute("class", "mini");
     if (e.target && e.target.files[0]) {
       formData.append("file", e.target.files[0], e.target.files[0].name);
     }
@@ -83,7 +120,7 @@ export const Edit = () => {
     console.log("delete");
     changeClass();
     formData.delete("image");
-    document.getElementById("thumb").remove();
+    document.getElementById("thumbi").remove();
     if (document.getElementById("errorsFile") !== null) {
       document.getElementById("errorsFile").textContent = "";
     }
@@ -102,11 +139,11 @@ export const Edit = () => {
     // }
   };
   return (
-    <div className="d-flex justify-content-center">
+    <div className="d-flex justify-content-center extraSize">
       <form onSubmit={handleSubmit(onSubmit)} className="col-10 sign-up-form">
         {error && <Error>{error}</Error>}
         {customError && <Error>{customError}</Error>}
-        <div className=" mb-3">
+        <div className=" mb-3 specEdit">
           <label htmlFor="title" className="form-label">
             Title
           </label>
@@ -120,7 +157,7 @@ export const Edit = () => {
             onChange={(e) => updateValue(e)}
           />
         </div>
-        <div className=" mb-3">
+        <div className=" mb-3 specEdit">
           <label htmlFor="content" className="form-label">
             Content
           </label>
@@ -131,16 +168,17 @@ export const Edit = () => {
             name="content"
             id="content"
             value={content}
+            rows={textareaheight}
             onChange={(e) => updateValue(e)}
           />
         </div>
-        <div className="mb-3">
+        <div className="mb-3 specImg">
           <div className="">
-            <span id="preview"></span>
-            {img && <img id="thumb" src={img} alt="" />}
+            <span id="preview" className="mini"></span>
+            {img && <img id="thumbi" className="mini" src={img} alt="" />}
           </div>
           <label htmlFor="content" className="form-label">
-            {img ? "Changer l'image" : "Ajouter une image"}
+            {image ? "Changer l'image" : "Ajouter une image"}
           </label>
           <input
             {...register("fileupload")}

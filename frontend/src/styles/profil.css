@@ -1,8 +1,7 @@
-thumb{
-  object-fit: cover;
-  border-radius: 50%;
-  width: 150px;
-  height: 150px;
+.mini{
+  object-fit: cover;  
+  width: 200x;
+  height: 200px;
 }
 #filelabel{
   background-color: aquamarine;
@@ -29,4 +28,16 @@ thumb{
   border-radius: 50%;
   width: 150px;
   height: 150px;
+}
+.extraSize{
+  flex: 1;  
+}
+.specEdit{
+  display: flex;
+  flex-direction: column;
+}
+.specImg{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

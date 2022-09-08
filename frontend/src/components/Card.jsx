@@ -17,7 +17,7 @@ export const Card = ({ article }) => {
     avatar: article.avatar,
   };
 
-  const goToUserDetail = (id) => {
+  const goToUserDetail = () => {
     navigate("/user-details", { state: { author } });
   };
 
@@ -31,8 +31,11 @@ export const Card = ({ article }) => {
 
   const editArticle = (id) => {
     console.log(id);
-    console.log(article);
-    navigate("/edit", { state: { article } });
+    const idA = {
+      idArt: id,
+    };
+    console.log(idA);
+    navigate("/edit", { state: { idA } });
   };
 
   return (

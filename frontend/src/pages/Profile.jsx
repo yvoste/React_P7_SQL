@@ -4,6 +4,7 @@ import { setUserDetails } from "../store/userActions";
 import { Error } from "../components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { unwrapResult } from "@reduxjs/toolkit";
 import "../styles/profil.css";
 
 export const Profile = () => {
@@ -11,6 +12,7 @@ export const Profile = () => {
   const [customError] = useState(null);
   const [selectedFile] = useState();
   const navigate = useNavigate();
+  console.log(userInfo);
   const [id_user] = useState(userInfo.id_user);
   const [pseudo, setPseudo] = useState(userInfo.pseudo);
   const [bio, setBio] = useState(userInfo.bio);
@@ -44,11 +46,13 @@ export const Profile = () => {
     });
     console.log(typeof formData);
 
-    const { post } = dispatch(setUserDetails(formData));
-    //toggleLoader(false);
-    if (post) {
-      navigate("/");
-    }
+    dispatch(setUserDetails(formData))
+      .then(unwrapResult)
+      .then((obj) => {
+        console.log({ obj });
+        navigate("/list");
+      })
+      .catch((obj) => console.log({ objErr: obj }));
   };
 
   const handleFileChange = (e) => {

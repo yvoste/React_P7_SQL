@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   getArticles,
-  getArticle,
   updateArticle,
   postArticle,
   delArticle,
@@ -12,6 +11,11 @@ const initialState = {
   articles: null,
   error: null,
   success: false,
+};
+
+const upArticle = (payload, data) => {
+  console.log(payload);
+  console.log(data);
 };
 
 const articleSlice = createSlice({
@@ -40,26 +44,18 @@ const articleSlice = createSlice({
       state.error = payload;
     },
 
-    [getArticle.pending]: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    [getArticle.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.articles = payload;
-    },
-    [getArticle.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.error = payload;
-    },
-
     [updateArticle.pending]: (state) => {
       state.loading = true;
       state.error = null;
     },
     [updateArticle.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.articles = payload;
+      const ind = payload.indexo;
+      state.articles[ind].title = payload.title;
+      state.articles[ind].content = payload.content;
+      state.articles[ind].image = payload.image;
+      state.articles[ind].img = payload.img;
+      state.success = true;
     },
     [updateArticle.rejected]: (state, { payload }) => {
       state.loading = false;

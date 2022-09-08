@@ -18,39 +18,18 @@ export const getArticles = createAsyncThunk(
   }
 );
 
-export const getArticle = createAsyncThunk(
-  "article/getArticle",
-  async ({ email, password }, { rejectWithValue }) => {
-    try {
-      // configure header's Content-Type as JSON
-
-      const { data } = await instance.post("/user/login", { email, password });
-
-      // store user's token in local storage
-      localStorage.setItem("userToken", data.userToken);
-
-      return data;
-    } catch (error) {
-      // return custom error message from API if any
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
-  }
-);
-
 export const updateArticle = createAsyncThunk(
   "article/updateArticle",
-  async ({ email, password }, { rejectWithValue }) => {
+  async (bidouble, { rejectWithValue }) => {
     try {
-      // configure header's Content-Type as JSON
+      const dataArticle = bidouble.data;
+      const { data } = await instance.put("/messages", dataArticle);
 
-      const { data } = await instance.post("/user/login", { email, password });
-
-      // store user's token in local storage
-      localStorage.setItem("userToken", data.userToken);
+      bidouble.articles.forEach((elem, index) => {
+        if (parseInt(elem.id) === parseInt(data.id)) {
+          data.indexo = index;
+        }
+      });
 
       return data;
     } catch (error) {
