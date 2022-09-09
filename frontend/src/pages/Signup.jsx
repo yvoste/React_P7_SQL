@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { UserContext } from "../context/useContext";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -16,13 +17,15 @@ export const Signup = () => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 
+  const { feedback, toggleFeed } = useContext(UserContext);
+
   useEffect(() => {
     if (userInfo) {
       navigate("/");
     }
   }, [navigate, userInfo, success]);
 
-  const submitForm = (data) => {
+  const submitForm = async (data) => {
     // check if passwords match
     if (data.password !== data.confirmPassword) {
       setCustomError("Password mismatch");
@@ -31,7 +34,29 @@ export const Signup = () => {
     // transform email string to lowercase to avoid case sensitivity issues in login
     data.email = data.email.toLowerCase();
 
-    dispatch(registerUser(data));
+    // call Redux Thunk
+    /*
+    Thunk est un concept de programmation dans lequel une fonction est utilisée pour retarder l'évaluation/le calcul d'une opération. Redux Thunk est un middleware qui vous permet de faire un appel à l'action auprès des créateurs qui renvoie une fonction au lieu d'un objet d'action.
+    */
+    try {
+      const resultAction = await dispatch(registerUser(data)).unwrap(); // unwrap permet de récupérer l'object renvoyer par thunk pour le traiter
+      // handle result here
+      console.log(resultAction);
+      const type = "success";
+      const msg = "successfully registered user";
+      const state = true;
+      const newFeed = { ...feedback, type, msg, state };
+      toggleFeed(newFeed);
+      navigate("/list");
+    } catch (rejectedValueOrSerializedError) {
+      // handle error here
+      console.log(rejectedValueOrSerializedError);
+      const type = "error";
+      const msg = rejectedValueOrSerializedError;
+      const state = true;
+      const newFeed = { ...feedback, type, msg, state };
+      toggleFeed(newFeed);
+    }
   };
 
   return (

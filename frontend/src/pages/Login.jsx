@@ -2,7 +2,8 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../store/userActions";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
+import { UserContext } from "../context/useContext";
 import { Error } from "../components";
 
 export const Login = () => {
@@ -13,6 +14,8 @@ export const Login = () => {
 
   const navigate = useNavigate();
 
+  const { feedback, toggleFeed } = useContext(UserContext);
+
   // redirect authenticated user to profile screen
   useEffect(() => {
     if (userInfo) {
@@ -20,8 +23,30 @@ export const Login = () => {
     }
   }, [navigate, userInfo]);
 
-  const submitForm = (data) => {
-    dispatch(userLogin(data));
+  const submitForm = async (data) => {
+    // call Redux Thunk
+    /*
+    Thunk est un concept de programmation dans lequel une fonction est utilisée pour retarder l'évaluation/le calcul d'une opération. Redux Thunk est un middleware qui vous permet de faire un appel à l'action auprès des créateurs qui renvoie une fonction au lieu d'un objet d'action.
+    */
+    try {
+      const resultAction = await dispatch(userLogin(data)).unwrap(); // unwrap permet de récupérer l'object renvoyer par thunk pour le traiter
+      // handle result here
+      console.log(resultAction);
+      const type = "success";
+      const msg = "successfully logged user";
+      const state = true;
+      const newFeed = { ...feedback, type, msg, state };
+      toggleFeed(newFeed);
+      navigate("/list");
+    } catch (rejectedValueOrSerializedError) {
+      // handle error here
+      console.log(rejectedValueOrSerializedError);
+      const type = "error";
+      const msg = rejectedValueOrSerializedError;
+      const state = true;
+      const newFeed = { ...feedback, type, msg, state };
+      toggleFeed(newFeed);
+    }
   };
 
   return (

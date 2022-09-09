@@ -3,41 +3,42 @@ import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { updateArticle } from "../store/articleActions";
 import { Error } from "../components";
-import { useState, useEffect } from "react";
-import { unwrapResult } from "@reduxjs/toolkit";
+import { useState, useContext } from "react";
+import { UserContext } from "../context/useContext";
 import "../styles/profil.css";
 
 export const Edit = () => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-
   const location = useLocation();
-  const { idArt } = location.state?.idA;
+  const { register, handleSubmit } = useForm(); // hook react pour les formulaires controllés
 
-  console.log(idArt);
+  let formData = new FormData();
+
+  // utilise location.state pour récupérer l'objet envoyer depuis Card => editArticle contentant id de l'article et l'index de l'article dans le store
+  const { idArt, indexo } = location.state?.idA;
 
   const { loading, articles, error } = useSelector((state) => state.articles);
-
   const art = articles.find(({ id }) => id === idArt);
-
-  console.log(art);
 
   const [customError] = useState(null);
 
   const [selectedFile] = useState();
 
-  // defaul value of textarea in rows
-  const [textareaheight, setTextareaheight] = useState(4);
+  const { feedback, toggleFeed } = useContext(UserContext);
 
-  const [title, setTitle] = useState(art.title);
-  const [content, setContent] = useState(art.content);
+  // calcul de la hauteur du textarer si modification, valeur par default 6 rows
+  const [textareaheight, setTextareaheight] = useState(6);
+
+  const [title, setTitle] = useState(art.title); // variable avec setter
+  const [content, setContent] = useState(art.content); // variable avec setter
   const [img] = useState(art.img);
   const [image] = useState(art.image);
 
-  const { register, handleSubmit } = useForm();
-  let formData = new FormData();
-
+  /**
+   * Modifie la valuer des inputs concernés et la hauteur du textarea si il y lieu
+   * @param {object} e
+   */
   const updateValue = (e) => {
     if (e.target.name === "content") {
       const height = e.target.scrollHeight;
@@ -58,32 +59,51 @@ export const Edit = () => {
     }
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
-
+  /**
+   * Soumission du formulaire
+   * @param {Object} data
+   */
+  const onSubmit = async (data) => {
     formData.append("title", data.title);
     formData.append("content", data.content);
     formData.append("user_id", art.user_id);
     formData.append("image", art.image);
     formData.append("idMessage", idArt);
-
     // One possibilty to watch formData
     // formData.forEach((value, key) => {
     //   console.log(key + "__" + value);
     // });
-
-    const bidouble = {
+    const objectToTransmitted = {
       data: formData,
       articles: articles,
+      indexo: indexo,
     };
 
-    dispatch(updateArticle(bidouble))
-      .then(unwrapResult)
-      .then((obj) => {
-        console.log({ obj });
-        navigate("/list");
-      })
-      .catch((obj) => console.log({ objErr: obj }));
+    // call Redux Thunk
+    /*
+    Thunk est un concept de programmation dans lequel une fonction est utilisée pour retarder l'évaluation/le calcul d'une opération. Redux Thunk est un middleware qui vous permet de faire un appel à l'action auprès des créateurs qui renvoie une fonction au lieu d'un objet d'action.
+    */
+    try {
+      const resultAction = await dispatch(
+        updateArticle(objectToTransmitted)
+      ).unwrap(); // unwrap permet de récupérer l'object renvoyer par thunk pour le traiter
+      // handle result here
+      console.log(resultAction);
+      const type = "success";
+      const msg = "successfully updated item";
+      const state = true;
+      const newFeed = { ...feedback, type, msg, state };
+      toggleFeed(newFeed);
+      navigate("/list");
+    } catch (rejectedValueOrSerializedError) {
+      // handle error here
+      console.log(rejectedValueOrSerializedError);
+      const type = "error";
+      const msg = rejectedValueOrSerializedError;
+      const state = true;
+      const newFeed = { ...feedback, type, msg, state };
+      toggleFeed(newFeed);
+    }
   };
 
   // redirect authenticated user to profile screen

@@ -20,17 +20,12 @@ export const getArticles = createAsyncThunk(
 
 export const updateArticle = createAsyncThunk(
   "article/updateArticle",
-  async (bidouble, { rejectWithValue }) => {
+  async (objectToTransmitted, { rejectWithValue }) => {
     try {
-      const dataArticle = bidouble.data;
+      const dataArticle = objectToTransmitted.data;
       const { data } = await instance.put("/messages", dataArticle);
-
-      bidouble.articles.forEach((elem, index) => {
-        if (parseInt(elem.id) === parseInt(data.id)) {
-          data.indexo = index;
-        }
-      });
-
+      console.log(data);
+      data.indexo = objectToTransmitted.indexo;
       return data;
     } catch (error) {
       // return custom error message from API if any
@@ -45,15 +40,10 @@ export const updateArticle = createAsyncThunk(
 
 export const postArticle = createAsyncThunk(
   "article/postArticle",
-  async ({ email, password }, { rejectWithValue }) => {
+  async (objectToTransmitted, { rejectWithValue }) => {
     try {
-      // configure header's Content-Type as JSON
-
-      const { data } = await instance.post("/user/login", { email, password });
-
-      // store user's token in local storage
-      localStorage.setItem("userToken", data.userToken);
-
+      const dataArticle = objectToTransmitted.data;
+      const { data } = await instance.post("/messages", dataArticle);
       return data;
     } catch (error) {
       // return custom error message from API if any

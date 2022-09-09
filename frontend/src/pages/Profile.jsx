@@ -4,7 +4,6 @@ import { setUserDetails } from "../store/userActions";
 import { Error } from "../components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { unwrapResult } from "@reduxjs/toolkit";
 import "../styles/profil.css";
 
 export const Profile = () => {
@@ -12,7 +11,7 @@ export const Profile = () => {
   const [customError] = useState(null);
   const [selectedFile] = useState();
   const navigate = useNavigate();
-  console.log(userInfo);
+  //console.log(userInfo);
   const [id_user] = useState(userInfo.id_user);
   const [pseudo, setPseudo] = useState(userInfo.pseudo);
   const [bio, setBio] = useState(userInfo.bio);
@@ -34,25 +33,27 @@ export const Profile = () => {
     }
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
     formData.append("pseudo", data.pseudo);
     formData.append("bio", data.bio);
     formData.append("userId", data.userId);
-
     // One possibilty to watch formData
-    formData.forEach((value, key) => {
-      console.log(key + "__" + value);
-    });
-    console.log(typeof formData);
-
-    dispatch(setUserDetails(formData))
-      .then(unwrapResult)
-      .then((obj) => {
-        console.log({ obj });
-        navigate("/list");
-      })
-      .catch((obj) => console.log({ objErr: obj }));
+    // formData.forEach((value, key) => {
+    //   console.log(key + "__" + value);
+    // });
+    // call Redux Thunk
+    /*
+    Thunk est un concept de programmation dans lequel une fonction est utilisée pour retarder l'évaluation/le calcul d'une opération. Redux Thunk est un middleware qui vous permet de faire un appel à l'action auprès des créateurs qui renvoie une fonction au lieu d'un objet d'action.
+    */
+    try {
+      const resultAction = await dispatch(setUserDetails(formData)).unwrap(); // unwrap permet de récupérer l'object renvoyer par thunk pour le traiter
+      // handle result here
+      console.log(resultAction);
+      navigate("/list");
+    } catch (rejectedValueOrSerializedError) {
+      // handle error here indique l'erreur en haut du formulaire dans le composant Error
+      console.log(rejectedValueOrSerializedError);
+    }
   };
 
   const handleFileChange = (e) => {

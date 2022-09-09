@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import "../styles/card.css";
 
-export const Card = ({ article }) => {
+export const Card = ({ article, indexo }) => {
   const { userInfo } = useSelector((state) => state.user);
 
   const doneLiked = article.users_like.includes(userInfo.id_user) ? 1 : 0;
@@ -33,6 +33,7 @@ export const Card = ({ article }) => {
     console.log(id);
     const idA = {
       idArt: id,
+      indexo: indexo,
     };
     console.log(idA);
     navigate("/edit", { state: { idA } });

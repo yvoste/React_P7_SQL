@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Nav, Edit } from "./components";
+import { Nav, Edit, FeedBack } from "./components";
 import {
   Login,
   Signup,
@@ -16,6 +16,7 @@ function App() {
   return (
     <Router>
       <Nav />
+      <FeedBack />
       <main className="container content">
         <Routes>
           <Route path="/" element={<Home />} />
